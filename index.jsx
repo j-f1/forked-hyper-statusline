@@ -348,19 +348,17 @@ exports.decorateHyper = (Hyper, { React }) => {
          */
         Counter(key, title) {
             const n = this.state[key];
-            return React.createElement(
-                'div',
-                {
-                    className:
-                        'component_item item_icon item_number item_' + key,
-                    title: `${n} ${title.replace(
+            return (
+                <div
+                    className={'component_item item_icon item_number item_' + key}
+                    title={`${n} ${title.replace(
                         /\{pl ([^,}]+)(?:,\s*([^}]+))?\}/g,
                         (_, singular, plural) =>
                             n !== 1 ? plural || singular + 's' : singular
-                    )}`,
-                    hidden: !n
-                },
-                n
+                    )}`}
+                    hidden={!n}>
+                    {n}
+                </div>
             );
         }
 
@@ -376,84 +374,56 @@ exports.decorateHyper = (Hyper, { React }) => {
                 ? tildify(String(this.state.cwd))
                 : '';
             if (friendlyCwd) {
-                friendlyCwd = React.createElement(
-                    'span',
-                    null,
-                    path.dirname(friendlyCwd),
-                    path.sep,
-                    React.createElement(
-                        'strong',
-                        null,
-                        path.basename(friendlyCwd)
-                    )
-                );
+                friendlyCwd = <span>
+                    {path.dirname(friendlyCwd)}
+                    {path.sep}
+                    <strong>
+                        {path.basename(friendlyCwd)}
+                    </strong>
+                </span>;
             }
 
-            return React.createElement(
-                Hyper,
-                Object.assign({}, this.props, {
-                    customInnerChildren: existingChildren.concat(
-                        React.createElement(
-                            'footer',
-                            { className: 'footer_footer' },
-                            React.createElement(
-                                'div',
-                                { className: 'footer_group group_overflow' },
-                                React.createElement(
-                                    'div',
-                                    {
-                                        className:
-                                            'component_component component_cwd'
-                                    },
-                                    React.createElement(
-                                        'div',
-                                        {
-                                            className:
-                                                'component_item item_icon item_cwd item_clickable',
-                                            title: this.state.cwd,
-                                            onClick: this.handleCwdClick,
-                                            hidden: !this.state.cwd
-                                        },
-                                        friendlyCwd
-                                    )
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'footer_group' },
-                                React.createElement(
-                                    'div',
-                                    {
-                                        className:
-                                            'component_component component_git'
-                                    },
-                                    React.createElement(
-                                        'div',
-                                        {
-                                            className: `component_item item_icon item_branch ${
-                                                this.state.remote
-                                                    ? 'item_clickable'
-                                                    : ''
-                                            }`,
-                                            title: this.state.remote,
-                                            onClick: this.handleBranchClick,
-                                            hidden: !this.state.branch
-                                        },
-                                        this.state.branch
-                                    ),
-                                    this.Counter(
+            return (
+                <Hyper
+                    {...this.props}
+                    customInnerChildren={existingChildren.concat(
+                        <footer className="footer_footer">
+                            <div className="footer_group group_overflow">
+                                <div className="component_component component_cwd">
+                                    <div
+                                        className="component_item item_icon item_cwd item_clickable"
+                                        title={this.state.cwd}
+                                        onClick={this.handleCwdClick}
+                                        hidden={!this.state.cwd}>
+                                        {friendlyCwd}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="footer_group">
+                                <div className="component_component component_git">
+                                    <div
+                                        className={`component_item item_icon item_branch ${
+                                            this.state.remote
+                                                ? 'item_clickable'
+                                                : ''
+                                        }`}
+                                        title={this.state.remote}
+                                        onClick={this.handleBranchClick}
+                                        hidden={!this.state.branch}>
+                                        {this.state.branch}
+                                    </div>
+                                    {this.Counter(
                                         'stashes',
                                         '{pl stash, stashes}'
-                                    ),
-                                    this.Counter('dirty', 'dirty {pl file}'),
-                                    this.Counter('new', 'new {pl file}'),
-                                    this.Counter('ahead', '{pl commit} ahead'),
-                                    this.Counter('behind', '{pl commit} behind')
-                                )
-                            )
-                        )
-                    )
-                })
+                                    )}
+                                    {this.Counter('dirty', 'dirty {pl file}')}
+                                    {this.Counter('new', 'new {pl file}')}
+                                    {this.Counter('ahead', '{pl commit} ahead')}
+                                    {this.Counter('behind', '{pl commit} behind')}
+                                </div>
+                            </div>
+                        </footer>
+                    )} />
             );
         }
 
