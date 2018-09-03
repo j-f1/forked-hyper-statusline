@@ -367,12 +367,12 @@ exports.decorateHyper = (Hyper, { React }) => {
         }
 
         render() {
-            const { customChildren } = this.props;
+            const { customInnerChildren } = this.props;
             const { Counter } = this;
-            const existingChildren = customChildren
-                ? customChildren instanceof Array
-                    ? customChildren
-                    : [customChildren]
+            const existingChildren = customInnerChildren
+                ? customInnerChildren instanceof Array
+                    ? customInnerChildren
+                    : [customInnerChildren]
                 : [];
 
             let friendlyCwd = this.state.cwd
