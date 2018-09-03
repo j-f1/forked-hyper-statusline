@@ -1,5 +1,9 @@
 # hyper-statusline [![hyper](https://img.shields.io/badge/Hyper-v1.3.3-brightgreen.svg)](https://github.com/zeit/hyper/releases/tag/1.3.3) [![npm](https://img.shields.io/npm/v/@j-f/hyper-statusline.svg?maxAge=86400?style=flat-square)](https://www.npmjs.com/package/@j-f/hyper-statusline) [![npm](https://img.shields.io/npm/dt/@j-f/hyper-statusline.svg?maxAge=86400?style=flat-square)](https://www.npmjs.com/package/@j-f/hyper-statusline)
 
+> This is a fork of **@henrikdah**’s [`hyper-statusline`](https://github.com/henrikdahl/hyper-statusline) package.
+
+- - -
+
 > Status Line Plugin for [Hyper](https://hyper.is). Shows clickable & useful information. Matches any theme.
 
 ![hyper-statusline](https://cloud.githubusercontent.com/assets/1430576/21891665/14d29070-d8d4-11e6-9e98-b12ed28be93a.png)
