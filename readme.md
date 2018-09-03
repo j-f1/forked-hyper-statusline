@@ -2,12 +2,11 @@
 
 > This is a fork of **@henrikdah**’s [`hyper-statusline`](https://github.com/henrikdahl/hyper-statusline) package.
 
-- - -
+---
 
 > Status Line Plugin for [Hyper](https://hyper.is). Shows clickable & useful information. Matches any theme.
 
 ![hyper-statusline](https://cloud.githubusercontent.com/assets/1430576/21891665/14d29070-d8d4-11e6-9e98-b12ed28be93a.png)
-
 
 ## Install
 
@@ -21,12 +20,12 @@ module.exports = {
 }
 ```
 
-
 ## Config
 
 Add following to `~/.hyper.js`
 
 ### Change Git Dirty Color
+
 Expected value is `CSS color`
 
 ```javascript
@@ -42,6 +41,7 @@ module.exports = {
 ```
 
 ### Change Git Ahead Color
+
 Expected value is `CSS color`
 
 ```javascript
@@ -57,6 +57,7 @@ module.exports = {
 ```
 
 ### Disable Footer Transparency
+
 Default value is set to `true`
 
 ```javascript
@@ -71,11 +72,9 @@ module.exports = {
 }
 ```
 
-
 ## Theme
 
-* [hyper-chesterish](https://github.com/henrikdahl/hyper-chesterish)
-
+-   [hyper-chesterish](https://github.com/henrikdahl/hyper-chesterish)
 
 ## License
 

@@ -5,7 +5,7 @@ const color = require('color');
 const afterAll = require('after-all-results');
 const tildify = require('tildify');
 
-exports.decorateConfig = (config) => {
+exports.decorateConfig = config => {
     const colorForeground = color(config.foregroundColor || '#fff');
     const colorBackground = color(config.backgroundColor || '#000');
     const colors = {
@@ -13,6 +13,7 @@ exports.decorateConfig = (config) => {
         background: colorBackground.lighten(0.3).string()
     };
 
+    // prettier-ignore
     const configColors = Object.assign({
         black: '#000000',
         red: '#ff0000',
@@ -32,6 +33,7 @@ exports.decorateConfig = (config) => {
         lightWhite: '#ffffff'
     }, config.colors);
 
+    // prettier-ignore
     const hyperStatusLine = Object.assign({
         footerTransparent: true,
         dirtyColor: configColors.lightYellow,
@@ -172,62 +174,84 @@ let git = {
 
 const setCwd = (pid, action) => {
     if (process.platform == 'win32') {
-        let directoryRegex = /([a-zA-Z]:[^\:\[\]\?\"\<\>\|]+)/mi;
+        let directoryRegex = /([a-zA-Z]:[^\:\[\]\?\"\<\>\|]+)/im;
         if (action && action.data) {
             let path = directoryRegex.exec(action.data);
-            if(path){
+            if (path) {
                 cwd = path[0];
                 setGit(cwd);
             }
         }
     } else {
-        exec(`lsof -p ${pid} | awk '$4=="cwd"' | tr -s ' ' | cut -d ' ' -f9-`, (err, stdout) => {
-            cwd = stdout.trim();
-            setGit(cwd);
-        });
+        exec(
+            `lsof -p ${pid} | awk '$4=="cwd"' | tr -s ' ' | cut -d ' ' -f9-`,
+            (err, stdout) => {
+                cwd = stdout.trim();
+                setGit(cwd);
+            }
+        );
     }
 };
 
 const isGit = (dir, cb) => {
-    exec(`git rev-parse --is-inside-work-tree`, { cwd: dir }, (err) => {
+    exec(`git rev-parse --is-inside-work-tree`, { cwd: dir }, err => {
         cb(!err);
     });
 };
 
 const gitBranch = (repo, cb) => {
-    exec(`git symbolic-ref --short HEAD || git rev-parse --short HEAD`, { cwd: repo }, (err, stdout) => {
-        if (err) {
-            return cb(err);
-        }
+    exec(
+        `git symbolic-ref --short HEAD || git rev-parse --short HEAD`,
+        { cwd: repo },
+        (err, stdout) => {
+            if (err) {
+                return cb(err);
+            }
 
-        cb(null, stdout.trim());
-    });
+            cb(null, stdout.trim());
+        }
+    );
 };
 
 const gitRemote = (repo, cb) => {
     exec(`git ls-remote --get-url`, { cwd: repo }, (err, stdout) => {
-        cb(null, stdout.trim().replace(/^git@(.*?):/, 'https://$1/').replace(/[A-z0-9\-]+@/, '').replace(/\.git$/, ''));
+        cb(
+            null,
+            stdout
+                .trim()
+                .replace(/^git@(.*?):/, 'https://$1/')
+                .replace(/[A-z0-9\-]+@/, '')
+                .replace(/\.git$/, '')
+        );
     });
 };
 
 const gitDirty = (repo, cb) => {
-    exec(`git status --porcelain --ignore-submodules -uno | wc -l`, { cwd: repo }, (err, stdout) => {
-        if (err) {
-            return cb(err);
-        }
+    exec(
+        `git status --porcelain --ignore-submodules -uno | wc -l`,
+        { cwd: repo },
+        (err, stdout) => {
+            if (err) {
+                return cb(err);
+            }
 
-        cb(null, !stdout ? 0 : parseInt(stdout.trim(), 10));
-    });
+            cb(null, !stdout ? 0 : parseInt(stdout.trim(), 10));
+        }
+    );
 };
 
 const gitNew = (repo, cb) => {
-    exec(`git status --porcelain --ignore-submodules | grep -E '^(\\?\\?|A ) ' | wc -l`, { cwd: repo }, (err, stdout) => {
-        if (err) {
-            return cb(err);
-        }
+    exec(
+        `git status --porcelain --ignore-submodules | grep -E '^(\\?\\?|A ) ' | wc -l`,
+        { cwd: repo },
+        (err, stdout) => {
+            if (err) {
+                return cb(err);
+            }
 
-        cb(null, !stdout ? 0 : parseInt(stdout.trim(), 10));
-    });
+            cb(null, !stdout ? 0 : parseInt(stdout.trim(), 10));
+        }
+    );
 };
 
 const gitStashes = (repo, cb) => {
@@ -241,18 +265,22 @@ const gitStashes = (repo, cb) => {
 };
 
 const gitAheadBehind = (repo, cb) => {
-    exec(`git rev-list --left-right --count HEAD...@'{u}' 2>/dev/null`, { cwd: repo }, (err, stdout) => {
-        if (err) {
-            return cb(err);
-        }
+    exec(
+        `git rev-list --left-right --count HEAD...@'{u}' 2>/dev/null`,
+        { cwd: repo },
+        (err, stdout) => {
+            if (err) {
+                return cb(err);
+            }
 
-        cb(null, stdout.split('\t').map(n => parseInt(n, 10)));
-    });
+            cb(null, stdout.split('\t').map(n => parseInt(n, 10)));
+        }
+    );
 };
 
 const gitCheck = (repo, cb) => {
     let failed = false;
-    const send = (key) => (err, results) => {
+    const send = key => (err, results) => {
         if (err) {
             return cb(err);
         }
@@ -268,8 +296,8 @@ const gitCheck = (repo, cb) => {
     gitAheadBehind(repo, send(([ahead, behind]) => ({ ahead, behind })));
 };
 
-const setGit = (repo) => {
-    isGit(repo, (exists) => {
+const setGit = repo => {
+    isGit(repo, exists => {
         if (!exists) {
             git = {
                 branch: '',
@@ -292,7 +320,7 @@ const setGit = (repo) => {
             Object.assign(git, result);
         });
     });
-}
+};
 
 exports.decorateHyper = (Hyper, { React }) => {
     return class extends React.PureComponent {
@@ -306,7 +334,7 @@ exports.decorateHyper = (Hyper, { React }) => {
         }
 
         handleCwdClick(event) {
-            shell.openExternal('file://'+this.state.cwd);
+            shell.openExternal('file://' + this.state.cwd);
         }
 
         handleBranchClick(event) {
@@ -320,51 +348,112 @@ exports.decorateHyper = (Hyper, { React }) => {
          */
         Counter(key, title) {
             const n = this.state[key];
-            return React.createElement('div', {
-                className: 'component_item item_icon item_number item_' + key,
-                title: `${n} ${title.replace(
-                    /\{pl ([^,}]+)(?:,\s*([^}]+))?\}/g,
-                    (_, singular, plural) => n !== 1 ? plural || singular + 's' : singular
-                )}`,
-                hidden: !n
-            }, n);
+            return React.createElement(
+                'div',
+                {
+                    className:
+                        'component_item item_icon item_number item_' + key,
+                    title: `${n} ${title.replace(
+                        /\{pl ([^,}]+)(?:,\s*([^}]+))?\}/g,
+                        (_, singular, plural) =>
+                            n !== 1 ? plural || singular + 's' : singular
+                    )}`,
+                    hidden: !n
+                },
+                n
+            );
         }
 
         render() {
             const { customChildren } = this.props;
-            const existingChildren = customChildren ? customChildren instanceof Array ? customChildren : [customChildren] : [];
+            const existingChildren = customChildren
+                ? customChildren instanceof Array
+                    ? customChildren
+                    : [customChildren]
+                : [];
 
-            let friendlyCwd = this.state.cwd ? tildify(String(this.state.cwd)) : '';
+            let friendlyCwd = this.state.cwd
+                ? tildify(String(this.state.cwd))
+                : '';
             if (friendlyCwd) {
-                friendlyCwd = React.createElement("span", null,
+                friendlyCwd = React.createElement(
+                    'span',
+                    null,
                     path.dirname(friendlyCwd),
                     path.sep,
-                    React.createElement("strong", null,
+                    React.createElement(
+                        'strong',
+                        null,
                         path.basename(friendlyCwd)
                     )
                 );
             }
 
-            return (
-                React.createElement(Hyper, Object.assign({}, this.props, {
-                    customInnerChildren: existingChildren.concat(React.createElement('footer', { className: 'footer_footer' },
-                        React.createElement('div', { className: 'footer_group group_overflow' },
-                            React.createElement('div', { className: 'component_component component_cwd' },
-                                React.createElement('div', { className: 'component_item item_icon item_cwd item_clickable', title: this.state.cwd, onClick: this.handleCwdClick, hidden: !this.state.cwd }, friendlyCwd)
-                            )
-                        ),
-                        React.createElement('div', { className: 'footer_group' },
-                            React.createElement('div', { className: 'component_component component_git' },
-                                React.createElement('div', { className: `component_item item_icon item_branch ${this.state.remote ? 'item_clickable' : ''}`, title: this.state.remote, onClick: this.handleBranchClick, hidden: !this.state.branch }, this.state.branch),
-                                this.Counter('stashes', '{pl stash, stashes}'),
-                                this.Counter('dirty', 'dirty {pl file}'),
-                                this.Counter('new', 'new {pl file}'),
-                                this.Counter('ahead', '{pl commit} ahead'),
-                                this.Counter('behind', '{pl commit} behind'),
+            return React.createElement(
+                Hyper,
+                Object.assign({}, this.props, {
+                    customInnerChildren: existingChildren.concat(
+                        React.createElement(
+                            'footer',
+                            { className: 'footer_footer' },
+                            React.createElement(
+                                'div',
+                                { className: 'footer_group group_overflow' },
+                                React.createElement(
+                                    'div',
+                                    {
+                                        className:
+                                            'component_component component_cwd'
+                                    },
+                                    React.createElement(
+                                        'div',
+                                        {
+                                            className:
+                                                'component_item item_icon item_cwd item_clickable',
+                                            title: this.state.cwd,
+                                            onClick: this.handleCwdClick,
+                                            hidden: !this.state.cwd
+                                        },
+                                        friendlyCwd
+                                    )
+                                )
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'footer_group' },
+                                React.createElement(
+                                    'div',
+                                    {
+                                        className:
+                                            'component_component component_git'
+                                    },
+                                    React.createElement(
+                                        'div',
+                                        {
+                                            className: `component_item item_icon item_branch ${
+                                                this.state.remote
+                                                    ? 'item_clickable'
+                                                    : ''
+                                            }`,
+                                            title: this.state.remote,
+                                            onClick: this.handleBranchClick,
+                                            hidden: !this.state.branch
+                                        },
+                                        this.state.branch
+                                    ),
+                                    this.Counter(
+                                        'stashes',
+                                        '{pl stash, stashes}'
+                                    ),
+                                    this.Counter('dirty', 'dirty {pl file}'),
+                                    this.Counter('new', 'new {pl file}'),
+                                    this.Counter('ahead', '{pl commit} ahead'),
+                                    this.Counter('behind', '{pl commit} behind')
+                                )
                             )
                         )
-                    ))
-                }))
+                    )
+                })
             );
         }
 
@@ -380,7 +469,7 @@ exports.decorateHyper = (Hyper, { React }) => {
     };
 };
 
-exports.middleware = (store) => (next) => (action) => {
+exports.middleware = store => next => action => {
     const uids = store.getState().sessions.sessions;
 
     switch (action.type) {
