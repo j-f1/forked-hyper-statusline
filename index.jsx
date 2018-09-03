@@ -331,6 +331,7 @@ exports.decorateHyper = (Hyper, { React }) => {
 
             this.handleCwdClick = this.handleCwdClick.bind(this);
             this.handleBranchClick = this.handleBranchClick.bind(this);
+            this.Counter = this.Counter.bind(this);
         }
 
         handleCwdClick(event) {
@@ -342,16 +343,16 @@ exports.decorateHyper = (Hyper, { React }) => {
         }
 
         /**
-         * @param key   key for `this.state` and `className`
+         * @param name  key for `this.state` and `className`
          * @param title `{pl foo}` prints `foo` for 1 and `foos` for 2.
          *              `{pl foo, bar}` prints `foo` for 1 and `bar` for 2.
          */
-        Counter(key, title) {
-            const n = this.state[key];
+        Counter({ name, title }) {
+            const n = this.state[name];
             return (
                 <div
                     className={
-                        'component_item item_icon item_number item_' + key
+                        'component_item item_icon item_number item_' + name
                     }
                     title={`${n} ${title.replace(
                         /\{pl ([^,}]+)(?:,\s*([^}]+))?\}/g,
@@ -367,6 +368,7 @@ exports.decorateHyper = (Hyper, { React }) => {
 
         render() {
             const { customChildren } = this.props;
+            const { Counter } = this;
             const existingChildren = customChildren
                 ? customChildren instanceof Array
                     ? customChildren
@@ -417,14 +419,23 @@ exports.decorateHyper = (Hyper, { React }) => {
                                     >
                                         {this.state.branch}
                                     </div>
-                                    {this.Counter(
-                                        'stashes',
-                                        '{pl stash, stashes}'
-                                    )}
-                                    {this.Counter('dirty', 'dirty {pl file}')}
-                                    {this.Counter('new', 'new {pl file}')}
-                                    {this.Counter('ahead', '{pl commit} ahead')}
-                                    {this.Counter('behind', '{pl commit} behind')}
+                                    <Counter
+                                        name="stashes"
+                                        title="{pl stash, stashes}"
+                                    />
+                                    <Counter
+                                        name="dirty"
+                                        title="dirty {pl file}"
+                                    />
+                                    <Counter name="new" title="new {pl file}" />
+                                    <Counter
+                                        name="ahead"
+                                        title="{pl commit} ahead"
+                                    />
+                                    <Counter
+                                        name="behind"
+                                        title="{pl commit} behind"
+                                    />
                                 </div>
                             </div>
                         </footer>
