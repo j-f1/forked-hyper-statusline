@@ -350,13 +350,16 @@ exports.decorateHyper = (Hyper, { React }) => {
             const n = this.state[key];
             return (
                 <div
-                    className={'component_item item_icon item_number item_' + key}
+                    className={
+                        'component_item item_icon item_number item_' + key
+                    }
                     title={`${n} ${title.replace(
                         /\{pl ([^,}]+)(?:,\s*([^}]+))?\}/g,
                         (_, singular, plural) =>
                             n !== 1 ? plural || singular + 's' : singular
                     )}`}
-                    hidden={!n}>
+                    hidden={!n}
+                >
                     {n}
                 </div>
             );
@@ -374,13 +377,13 @@ exports.decorateHyper = (Hyper, { React }) => {
                 ? tildify(String(this.state.cwd))
                 : '';
             if (friendlyCwd) {
-                friendlyCwd = <span>
-                    {path.dirname(friendlyCwd)}
-                    {path.sep}
-                    <strong>
-                        {path.basename(friendlyCwd)}
-                    </strong>
-                </span>;
+                friendlyCwd = (
+                    <span>
+                        {path.dirname(friendlyCwd)}
+                        {path.sep}
+                        <strong>{path.basename(friendlyCwd)}</strong>
+                    </span>
+                );
             }
 
             return (
@@ -394,7 +397,8 @@ exports.decorateHyper = (Hyper, { React }) => {
                                         className="component_item item_icon item_cwd item_clickable"
                                         title={this.state.cwd}
                                         onClick={this.handleCwdClick}
-                                        hidden={!this.state.cwd}>
+                                        hidden={!this.state.cwd}
+                                    >
                                         {friendlyCwd}
                                     </div>
                                 </div>
@@ -409,7 +413,8 @@ exports.decorateHyper = (Hyper, { React }) => {
                                         }`}
                                         title={this.state.remote}
                                         onClick={this.handleBranchClick}
-                                        hidden={!this.state.branch}>
+                                        hidden={!this.state.branch}
+                                    >
                                         {this.state.branch}
                                     </div>
                                     {this.Counter(
@@ -423,7 +428,8 @@ exports.decorateHyper = (Hyper, { React }) => {
                                 </div>
                             </div>
                         </footer>
-                    )} />
+                    )}
+                />
             );
         }
 

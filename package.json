@@ -21,7 +21,7 @@
     "scripts": {
         "prepare": "npm run build",
         "build": "babel index.jsx -d dist",
-        "test": "prettylint *.{js,json,md}",
+        "test": "prettylint *.{js{,x},json,md}",
         "fix": "npm test -- --fix"
     },
     "keywords": [
