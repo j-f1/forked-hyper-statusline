@@ -4,6 +4,8 @@ const path = require('path');
 const color = require('color');
 const tildify = require('tildify');
 
+let globalConfig;
+
 exports.decorateConfig = config => {
     const colorForeground = color(config.foregroundColor || '#fff');
     const colorBackground = color(config.backgroundColor || '#000');
@@ -321,6 +323,17 @@ const setGit = repo => {
     });
 };
 
+const getEditor = editorType => {
+    switch (editorType) {
+        case 'vscode':
+            return '/usr/local/bin/code';
+        case 'atom':
+            return '/usr/local/bin/atom';
+        default:
+            return 'open';
+    }
+};
+
 exports.decorateHyper = (Hyper, { React }) => {
     return class extends React.PureComponent {
         constructor(props) {
@@ -334,7 +347,18 @@ exports.decorateHyper = (Hyper, { React }) => {
         }
 
         handleCwdClick(event) {
-            shell.openExternal('file://' + this.state.cwd);
+            if (globalConfig.hyperStatusLine.openInEditor) {
+                exec(
+                    `${getEditor(globalConfig.hyperStatusLine.editor)} ${
+                        this.state.cwd
+                    }`,
+                    err => {
+                        if (err) console.error(err);
+                    }
+                );
+            } else {
+                shell.openExternal('file://' + this.state.cwd);
+            }
         }
 
         handleBranchClick(event) {
@@ -480,6 +504,10 @@ exports.middleware = store => next => action => {
         case 'SESSION_SET_ACTIVE':
             pid = uids[action.uid].pid;
             setCwd(pid);
+            break;
+
+        case 'CONFIG_LOAD':
+            globalConfig = action.config;
             break;
     }
 
