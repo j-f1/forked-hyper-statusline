@@ -2,7 +2,6 @@ const { shell } = require('electron');
 const { exec } = require('child_process');
 const path = require('path');
 const color = require('color');
-const afterAll = require('after-all-results');
 const tildify = require('tildify');
 
 exports.decorateConfig = config => {
