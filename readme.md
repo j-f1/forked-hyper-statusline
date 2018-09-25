@@ -72,6 +72,26 @@ module.exports = {
 }
 ```
 
+### Open in editor
+
+Default is set to false so clicking the cwd will still open in Finder.
+Set the flag to true and tell the config which editor to use.
+
+Supported editors: 'vscode', 'atom'
+
+```js
+module.exports = {
+  config: {
+    ...,
+    hyperStatusLine: {
+      openInEditor: true,
+      editor: 'vscode',
+    }
+    ...,
+  }
+}
+```
+
 ## Theme
 
 -   [hyper-chesterish](https://github.com/henrikdahl/hyper-chesterish)
