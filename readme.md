@@ -74,21 +74,19 @@ module.exports = {
 
 ### Open in editor
 
-Default is set to false so clicking the cwd will still open in Finder.
-Set the flag to true and tell the config which editor to use.
+This is disabled by default so clicking the current directory link will open your file manager.
+Set `openInEditor` to `true` and `editor` to your preferred editor to open an editor instead.
 
-Supported editors: 'vscode', 'atom'
+Currently supported editors are [VS Code](https://code.visualstudio.com) (`'vscode'`) and [Atom](https://atom.io) (`'atom'`)
 
 ```js
 module.exports = {
   config: {
-    ...,
     hyperStatusLine: {
       openInEditor: true,
       editor: 'vscode',
-    }
-    ...,
-  }
+    },
+  },
 }
 ```
 
