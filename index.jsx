@@ -325,12 +325,16 @@ const setGit = repo => {
 
 const getEditor = editorType => {
     switch (editorType) {
+        case 'code':
         case 'vscode':
             return '/usr/local/bin/code';
         case 'atom':
             return '/usr/local/bin/atom';
         default:
-            return 'open';
+            throw new Error(`
+                Invalid editor provided.
+                Please provide one of: 'atom', 'vscode'
+            `);
     }
 };
 
@@ -347,7 +351,7 @@ exports.decorateHyper = (Hyper, { React }) => {
         }
 
         handleCwdClick(event) {
-            if (globalConfig.hyperStatusLine.openInEditor) {
+            if (globalConfig.hyperStatusLine.editor) {
                 exec(
                     `${getEditor(globalConfig.hyperStatusLine.editor)} ${
                         this.state.cwd
