@@ -75,7 +75,7 @@ module.exports = {
 ### Open in editor
 
 This is disabled by default so clicking the current directory link will open your file manager.
-Set `openInEditor` to `true` and `editor` to your preferred editor to open an editor instead.
+Set `editor` to your preferred editor to open an editor instead.
 
 Currently supported editors are [VS Code](https://code.visualstudio.com) (`'vscode'`) and [Atom](https://atom.io) (`'atom'`)
 
@@ -83,7 +83,6 @@ Currently supported editors are [VS Code](https://code.visualstudio.com) (`'vsco
 module.exports = {
   config: {
     hyperStatusLine: {
-      openInEditor: true,
       editor: 'vscode',
     },
   },
