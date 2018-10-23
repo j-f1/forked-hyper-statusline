@@ -2,8 +2,9 @@ const { shell } = require('electron');
 const { exec } = require('child_process');
 const path = require('path');
 const color = require('color');
-const afterAll = require('after-all-results');
 const tildify = require('tildify');
+
+let globalConfig;
 
 exports.decorateConfig = config => {
     const colorForeground = color(config.foregroundColor || '#fff');
@@ -322,6 +323,21 @@ const setGit = repo => {
     });
 };
 
+const getEditor = editorType => {
+    switch (editorType) {
+        case 'code':
+        case 'vscode':
+            return '/usr/local/bin/code';
+        case 'atom':
+            return '/usr/local/bin/atom';
+        default:
+            throw new Error(`
+                Invalid editor provided.
+                Please provide one of: 'atom', 'vscode'
+            `);
+    }
+};
+
 exports.decorateHyper = (Hyper, { React }) => {
     return class extends React.PureComponent {
         constructor(props) {
@@ -335,7 +351,18 @@ exports.decorateHyper = (Hyper, { React }) => {
         }
 
         handleCwdClick(event) {
-            shell.openExternal('file://' + this.state.cwd);
+            if (globalConfig.hyperStatusLine.editor) {
+                exec(
+                    `${getEditor(globalConfig.hyperStatusLine.editor)} ${
+                        this.state.cwd
+                    }`,
+                    err => {
+                        if (err) console.error(err);
+                    }
+                );
+            } else {
+                shell.openExternal('file://' + this.state.cwd);
+            }
         }
 
         handleBranchClick(event) {
@@ -481,6 +508,10 @@ exports.middleware = store => next => action => {
         case 'SESSION_SET_ACTIVE':
             pid = uids[action.uid].pid;
             setCwd(pid);
+            break;
+
+        case 'CONFIG_LOAD':
+            globalConfig = action.config;
             break;
     }
 

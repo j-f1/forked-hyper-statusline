@@ -72,6 +72,23 @@ module.exports = {
 }
 ```
 
+### Open in editor
+
+This is disabled by default so clicking the current directory link will open your file manager.
+Set `editor` to your preferred editor to open an editor instead.
+
+Currently supported editors are [VS Code](https://code.visualstudio.com) (`'vscode'`) and [Atom](https://atom.io) (`'atom'`)
+
+```js
+module.exports = {
+  config: {
+    hyperStatusLine: {
+      editor: 'vscode',
+    },
+  },
+}
+```
+
 ## Theme
 
 -   [hyper-chesterish](https://github.com/henrikdahl/hyper-chesterish)

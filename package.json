@@ -1,6 +1,6 @@
 {
     "name": "@j-f/hyper-statusline",
-    "version": "1.8.2",
+    "version": "1.9.0",
     "description": "Status Line Plugin for Hyper. Updated fork of @henrikdahl's version.",
     "main": "dist/index.js",
     "license": "MIT",
@@ -13,6 +13,10 @@
         {
             "name": "Jed Fox",
             "email": "git@twopointzero.us"
+        },
+        {
+            "name": "Thibault Maekelbergh",
+            "email": "thibault.maekelbergh@icloud.com"
         }
     ],
     "files": [
@@ -30,7 +34,8 @@
         "hyperterm",
         "hyperterm-theme",
         "hyper-statusline",
-        "statusline"
+        "statusline",
+        "hyper-open-editor"
     ],
     "dependencies": {
         "after-all-results": "^2.0.0",
