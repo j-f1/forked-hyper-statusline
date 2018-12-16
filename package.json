@@ -1,6 +1,6 @@
 {
     "name": "@j-f/hyper-statusline",
-    "version": "1.9.0",
+    "version": "1.9.1",
     "description": "Status Line Plugin for Hyper. Updated fork of @henrikdahl's version.",
     "main": "dist/index.js",
     "license": "MIT",
