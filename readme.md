@@ -2,6 +2,10 @@
 
 > This is a fork of **@henrikdahl**’s [`hyper-statusline`](https://github.com/henrikdahl/hyper-statusline) package.
 
+Due to a bug in Hyper ([#3288](https://github.com/zeit/hyper/issues/3288)), you can’t install this via `hyper i`.
+Until the bug is fixed, you can clone this repo to `~/.hyper_plugins/local/hyper-statusline` and put `hyper-statusline` in your 
+`localPlugins`.
+
 ---
 
 > Status Line Plugin for [Hyper](https://hyper.is). Shows clickable & useful information. Matches any theme.
